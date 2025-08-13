@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1CKanban</title>
+    <link rel="stylesheet" href="../dist/kanban.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      .custom-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 7px 15px;
+        margin: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+      }      
+    </style>
+  </head>
+  <body>
+    <div id="myKanban"></div>
+    <button id="btn-simulate" onclick="simulateClick();"></button>
+    <script src="../dist/kanban.js"></script>
+    <script>fixWidth = function() {document.getElementsByClassName("kanban-container")[0].style.width = "100%";}</script>
+    <script>
+      enableScroll = function() {
+        const slider = document.getElementsByClassName('kanban-container')[0];
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+    
+        slider.addEventListener('mousedown', (e) => {
+          isDown = true;
+          slider.classList.add('active');
+          startX = e.pageX - slider.offsetLeft;
+          scrollLeft = slider.scrollLeft;
+        });
+        slider.addEventListener('mouseleave', () => {
+          isDown = false;
+          slider.classList.remove('active');
+        });
+        slider.addEventListener('mouseup', () => {
+          isDown = false;
+          slider.classList.remove('active');
+        });
+        slider.addEventListener('mousemove', (e) => {
+          if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 3;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+      }
+     </script>
+    <script>
+      var currentEl;
+      var currentTarget;
+      var currentSource;
+      var previousPosition;
+      var KanbanTest = new jKanban({
+        element: "#myKanban",
+        gutter: "0%",
+        widthBoard: "24%",
+        itemHandleOptions:{
+          enabled: false,
+        },
+        dragBoards : false,
+        click: function(el) {
+          console.log("Trigger on all items click!");
+        },
+        context: function(el, e) {
+          console.log("Trigger on all items right-click!");
+        },
+        dragEl: function (el, source) {
+          for (let index = 0; index < source.children.length; index++) {
+            if (source.children[index].getAttribute('class') == 'kanban-item is-moving') {
+              previousPosition = index;
+            } 
+          }      
+        },
+        dropEl: function(el, target, source, sibling){
+          currentEl = el;
+          currentTarget = target;
+          currentSource = source;
+
+          document.getElementById('btn-simulate').click();
+        },
+        dragendBoard: function (el) {
+          KanbanTest.addAddBoardButtons();
+          document.getElementById('btn-simulate').click();  
+        },
+        buttonClick: function(el, boardId) {
+          console.log(el);
+          console.log(boardId);
+          // create a form to enter element
+          var formItem = document.createElement("form");
+          formItem.setAttribute("class", "itemform");
+          formItem.innerHTML =
+            '<div class="form-group"><textarea class="form-control" rows="2" autofocus></textarea></div><div class="form-group"><button type="submit" class="btn btn-primary btn-xs pull-right">Submit</button><button type="button" id="CancelBtn" class="btn btn-default btn-xs pull-right">Cancel</button></div>';
+
+          KanbanTest.addForm(boardId, formItem);
+          formItem.addEventListener("submit", function(e) {
+            e.preventDefault();
+            var text = e.target[0].value;
+            KanbanTest.addElement(boardId, {
+              title: text
+            });
+            formItem.parentNode.removeChild(formItem);
+          });
+          document.getElementById("CancelBtn").onclick = function() {
+            formItem.parentNode.removeChild(formItem);
+          };
+        },
+        boards: []
+      });
+
+      document.body.setAttribute('width', document.documentElement.scrollWidth + 'px');
+
+      fixWidth();
+    </script>
+    <script>
+      deleteAllBoards = function() {
+        KanbanTest.deleteAllBoards();
+      }
+    </script>
+   <script>
+    addBoardsToKanban = function(boardTitles) {
+      boardTitles = JSON.parse(boardTitles);
+
+      var _boards = [];
+      for (var i = 0; i < boardTitles.length; i++) {
+        _boards.push({
+          id: boardTitles[i].id,
+          title: boardTitles[i].name,
+          class: "board-head",
+          dragTo: KanbanTest.getDragToBoards(boardTitles[i].id)
+        })
+      }
+
+      KanbanTest.addBoards(_boards);
+      KanbanTest.addMarginToBoards();
+      KanbanTest.addScroll();
+
+      fixWidth();
+    }
+ </script>
+ <script>
+  changeBoardsWidth = function(count) {
+    KanbanTest.changeBoardsWidth(count);
+  }
+</script>
+ <script>
+  addChangeBoardsToKanban = function(boardTitles) {
+    boardTitles = JSON.parse(boardTitles);
+
+    var _boards = [];
+    for (var i = 0; i < boardTitles.length; i++) {
+      _boards.push({
+        id: boardTitles[i].id,
+        title: KanbanTest.getTitleStates(),
+        class: "board-head"
+      })
+    }
+
+    KanbanTest.addBoards(_boards);
+
+    KanbanTest.fixSelects();
+
+    try {
+    KanbanTest.addDeleteButtonInAllHeaders();
+    KanbanTest.addAddBoardButtons();
+    KanbanTest.setDragBoards(true);
+    if (_boards.length != 0) {
+      KanbanTest.addScroll();
+    }
+    } catch(e) {
+      alert(e);
+    }
+    fixWidth();
+  }
+</script>
+<script>
+  addAddBoardButtons = function() {
+    KanbanTest.addAddBoardButtons();
+
+    fixWidth();
+  }
+</script>
+<script>
+  checkBoardsRepeat = function() {
+    checkStatus = KanbanTest.checkBoardsRepeat();
+    return checkStatus;
+  }
+</script>
+<script>
+  getStatesAndBoards = function() {
+    KanbanTest.fixBoardsId();
+
+    var result = [];
+
+    var selects = document.getElementsByClassName('states-select');
+    for (let i=0; i < selects.length; i++) {
+      var curSelect = selects[i];
+      var selectText = curSelect.options[curSelect.selectedIndex].text;
+
+      var curBoard = curSelect.parentElement.parentElement.parentElement;    
+      var boardId = curBoard.getAttribute('data-id');
+
+      result.push({state: selectText, boardId: boardId})
+    }
+
+    return JSON.stringify(result);
+  }
+</script>
+<script>
+  addTasks = function(taskTitles, boardId) {
+    taskTitles = JSON.parse(taskTitles);
+
+    for (var i = 0; i < taskTitles.length; i++) {
+      KanbanTest.addElement(boardId, {
+        id: taskTitles[i].id,
+        title: taskTitles[i].name
+      });
+      console.log(taskTitles[i].name);
+    }
+  }
+</script>
+   <script>
+    addAppointed = function(taskTitles) {
+      taskTitles = JSON.parse(taskTitles);
+
+      for (var i = 0; i < taskTitles.length; i++) {
+        KanbanTest.addElement("_appointed", {
+          id: taskTitles[i].id,
+          title: taskTitles[i].name
+        });
+	      console.log(taskTitles[i].name);
+      }
+    }
+ </script>
+   <script>
+    addInwork = function(taskTitles) {
+      taskTitles = JSON.parse(taskTitles);
+
+      for (var i = 0; i < taskTitles.length; i++) {
+        KanbanTest.addElement("_inwork", {
+          id: taskTitles[i].id,
+          title: taskTitles[i].name
+        });
+	      console.log(taskTitles[i].name);
+      }
+    }
+ </script>
+   <script>
+    addPause = function(taskTitles) {
+      taskTitles = JSON.parse(taskTitles);
+
+      for (var i = 0; i < taskTitles.length; i++) {
+        KanbanTest.addElement("_pause", {
+          id: taskTitles[i].id,
+          title: taskTitles[i].name
+        });
+	      console.log(taskTitles[i].name);
+      }
+    }
+ </script>
+   <script>
+    addAgreement = function(taskTitles) {
+      taskTitles = JSON.parse(taskTitles);
+
+      for (var i = 0; i < taskTitles.length; i++) {
+        KanbanTest.addElement("_agreements", {
+          id: taskTitles[i].id,
+          title: taskTitles[i].name
+        });
+	      console.log(taskTitles[i].name);
+      }
+    }
+ </script>
+   <script>
+    addPending = function(taskTitles) {
+      taskTitles = JSON.parse(taskTitles);
+
+      for (var i = 0; i < taskTitles.length; i++) {
+        KanbanTest.addElement("_pending", {
+          id: taskTitles[i].id,
+          title: taskTitles[i].name
+        });
+	      console.log(taskTitles[i].name);
+      }
+    }
+ </script>
+   <script>
+    addCompleted= function(taskTitles) {
+      taskTitles = JSON.parse(taskTitles);
+
+      for (var i = 0; i < taskTitles.length; i++) {
+        KanbanTest.addElement("_completed", {
+          id: taskTitles[i].id,
+          title: taskTitles[i].name
+        });
+	      console.log(taskTitles[i].name);
+      }
+    }
+ </script>
+   <script>
+    getAllElements= function(board_id) {
+      return KanbanTest.getBoardElements(board_id);
+    }
+ </script>
+<script>
+  getData= function() {
+    TaskGUID = currentEl.firstChild.getAttribute("href");
+    sourceId = currentSource.parentElement.getAttribute("data-id");
+  }
+</script>
+<script>
+  function changeBoardsColor(color, creater) {
+    KanbanTest.changeBoardsColor(color, creater);
+  }
+</script>
+   <script>
+    function simulateClick() {
+      console.log("Trigger!");
+}
+ </script>
+ <script>
+  replaceElement = function(taskId, targetBoard, taskTitle) {
+    KanbanTest.removeElement(taskId);
+    KanbanTest.addElement(targetBoard, {
+          id: taskId,
+          title: taskTitle
+        }, previousPosition);
+  }
+ </script>
+  </body>
+</html>
