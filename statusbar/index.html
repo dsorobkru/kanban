@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Range</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<input id='myRange' orient='0deg' type='range' min='0' value='0' max='9' step='1' />
+<script>
+   getValue = function() {
+      var range_value = document.getElementById("myRange").value;
+      return range_value;
+   }
+</script>
+<script>
+   setValue = function(newValue) {
+      document.getElementById("myRange").value = newValue;
+   }
+</script>
+<script>
+	blockInput = function() {
+		document.getElementById("myRange").disabled = true;
+	}
+	unblockInput = function() {
+		document.getElementById("myRange").disabled = false;
+	}
+</script>
+</body>
+</html>

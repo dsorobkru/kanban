@@ -1,0 +1,338 @@
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+  font-size: 1em;
+}
+
+body {
+  color: #BBB;
+  text-align: center;
+  overflow: hidden;
+}
+
+fieldset {
+  border: #999 solid 0.2em;
+  border-radius: 0.5em;
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  transition: border-color 0.25s linear;
+}
+fieldset:hover {
+  border: #BBB solid 0.2em;
+}
+
+legend {
+  font-size: 1.8em;
+  font-family: "Lobster", sans-serif;
+  padding-left: 0.3em;
+  padding-right: 0.2em;
+  color: #ACE;
+  text-shadow: -0.125em 0.05em 0 #214893, -0.25em 0.1em 0 #313131;
+}
+
+/* Slider *
+ * ====== */
+/* ## Slider main element */
+input[type=range] {
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  width: 9.9em;
+  height: 0.8em;
+  border-radius: 0.25em;
+  border: 0.2em solid #ffffff;
+  background-color: #ffffff;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.2s linear;
+  box-shadow: 0 0 0 0 transparent;
+}
+input[type=range]:focus {
+  box-shadow: 0 0 0 0.1em #AAAAAA;
+}
+input[type=range]:hover {
+  box-shadow: 0 0 0 0.15em #6FC5F0;
+}
+input[type=range][disabled]{
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* ## Orientation tweak, with [orient] attribute in degrees */
+/* > I know it's not standard, but that's the cleaner way I was thinking of. */
+input[type=range][orient] {
+  /* > Would be cool heh :-) : */
+  transform: rotate(attr(orient));
+}
+
+input[type=range][orient="90deg"] {
+  transform: rotate(90deg);
+}
+
+input[type=range][orient="180deg"] {
+  transform: rotate(180deg);
+}
+
+input[type=range][orient="270deg"] {
+  transform: rotate(270deg);
+}
+
+/* ### all vertical ranges : */
+input[type=range][orient="90deg"], input[type=range][orient="270deg"] {
+  margin: 4.5em -4.5em;
+  display: inline-block;
+}
+input[type=range][orient="90deg"]::-webkit-slider-thumb, input[type=range][orient="270deg"]::-webkit-slider-thumb {
+  cursor: ns-resize;
+}
+input[type=range][orient="90deg"]::-moz-range-thumb, input[type=range][orient="270deg"]::-moz-range-thumb {
+  cursor: ns-resize;
+}
+input[type=range][orient="90deg"]::-ms-thumb, input[type=range][orient="270deg"]::-ms-thumb {
+  cursor: ns-resize;
+}
+
+/* ## Slider components */
+/* ### Slider::-track */
+input[type=range]::-webkit-slider-runnable-track {
+  border: none;
+  background: none;
+  height: 100%;
+  width: 100%;
+}
+input[type=range]::-moz-range-track {
+  border: none;
+  background: none;
+  height: 100%;
+  width: 100%;
+}
+input[type=range]::-ms-track {
+  border: none;
+  background: none;
+  height: 100%;
+  width: 100%;
+}
+
+/* ### Slider::-thumb */
+input[type=range]::-webkit-slider-thumb {
+  margin: 0.05em;
+  padding: 0;
+  height: 0.9em;
+  width: 0.9em;
+  border-radius: 0.1em;
+  box-sizing: border-box;
+  border: none;
+  background-color: #6FC5F0;
+  box-shadow: -10em 0 0 0 #3E5F88,
+  -9em 0 0 0 #385D92,
+  -8em 0 0 0 #31599E,
+  -7em 0 0 0 #2857A7,
+  -6em 0 0 0 #2154B0,
+  -5em 0 0 0 #1952BB,
+  -4em 0 0 0 #2A69C6,
+  -3em 0 0 0 #3C81CF,
+  -2em 0 0 0 #4D98DB,
+  -1em 0 0 0 #6FC3EF,
+  1em 0 0 0 #f5f5f5,
+  2em 0 0 0 #f5f5f5,
+  3em 0 0 0 #f5f5f5,
+  4em 0 0 0 #f5f5f5,
+  5em 0 0 0 #f5f5f5,
+  6em 0 0 0 #f5f5f5,
+  7em 0 0 0 #f5f5f5,
+  8em 0 0 0 #f5f5f5,
+  9em 0 0 0 #f5f5f5;
+  cursor: ew-resize;
+}
+input[type=range]::-moz-range-thumb {
+  margin: 0.05em;
+  padding: 0;
+  height: 0.9em;
+  width: 0.9em;
+  border-radius: 0.1em;
+  box-sizing: border-box;
+  border: none;
+  background-color: #6FC5F0;
+  box-shadow: -10em 0 0 0 #3E5F88,
+  -9em 0 0 0 #385D92,
+  -8em 0 0 0 #31599E,
+  -7em 0 0 0 #2857A7,
+  -6em 0 0 0 #2154B0,
+  -5em 0 0 0 #1952BB,
+  -4em 0 0 0 #2A69C6,
+  -3em 0 0 0 #3C81CF,
+  -2em 0 0 0 #4D98DB,
+  -1em 0 0 0 #6FC3EF,
+  1em 0 0 0 #f5f5f5,
+  2em 0 0 0 #f5f5f5,
+  3em 0 0 0 #f5f5f5,
+  4em 0 0 0 #f5f5f5,
+  5em 0 0 0 #f5f5f5,
+  6em 0 0 0 #f5f5f5,
+  7em 0 0 0 #f5f5f5,
+  8em 0 0 0 #f5f5f5,
+  9em 0 0 0 #f5f5f5;
+  cursor: ew-resize;
+}
+input[type=range]::-ms-thumb {
+  margin: 0.05em;
+  padding: 0;
+  height: 0.9em;
+  width: 0.9em;
+  border-radius: 0.1em;
+  box-sizing: border-box;
+  border: none;
+  background-color: #6FC5F0;
+  box-shadow: -10em 0 0 0 #3E5F88,
+  -9em 0 0 0 #385D92,
+  -8em 0 0 0 #31599E,
+  -7em 0 0 0 #2857A7,
+  -6em 0 0 0 #2154B0,
+  -5em 0 0 0 #1952BB,
+  -4em 0 0 0 #2A69C6,
+  -3em 0 0 0 #3C81CF,
+  -2em 0 0 0 #4D98DB,
+  -1em 0 0 0 #6FC3EF,
+  1em 0 0 0 #f5f5f5,
+  2em 0 0 0 #f5f5f5,
+  3em 0 0 0 #f5f5f5,
+  4em 0 0 0 #f5f5f5,
+  5em 0 0 0 #f5f5f5,
+  6em 0 0 0 #f5f5f5,
+  7em 0 0 0 #f5f5f5,
+  8em 0 0 0 #f5f5f5,
+  9em 0 0 0 #f5f5f5;
+  cursor: ew-resize;
+}
+
+/* ## Browser tweaks */
+/* ### webkit */
+input[type=range], input[type=range]::-webkit-slider-runnable-track, input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+/* ### IE */
+input[type=range]::-ms-track {
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower, input[type=range]::-ms-fill-upper, input[type=range]::-ms-tooltip {
+  display: none;
+}
+
+/* Label *
+ * ====== */
+/* ## Label main element */
+label[type=range] {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: 0.6em;
+  width: 9.9em;
+  height: 1em;
+  border-radius: 0.25em;
+  color: #242424;
+  font-family: arial;
+  border: 0.2em solid transparent;
+  text-align: center;
+  border-bottom-color: #242424;
+  background-image: linear-gradient(#3F6088 calc(50% - .1em), #3F6088 calc(50% + .1em));
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: 0.2em 0.2em;
+  color: #999;
+}
+label[type=range]:first-letter {
+  font-size: 0.6em;
+}
+label[type=range]::before, label[type=range]::after {
+  display: block;
+  position: absolute;
+  height: 1em;
+  line-height: 1em;
+  width: 1em;
+}
+label[type=range]::before {
+  content: attr(before);
+  left: -0.2em;
+  text-align: left;
+}
+label[type=range]::after {
+  content: attr(after);
+  top: 0;
+  right: -0.2em;
+  text-align: right;
+}
+label[type=range][orient="90deg"], label[type=range][orient="270deg"] {
+  border-bottom-color: transparent;
+  display: inline-block;
+  width: 1em;
+  height: 10.1em;
+  line-height: 10.1em;
+  vertical-align: top;
+}
+label[type=range][orient="90deg"] {
+  border-bottom-color: transparent;
+  border-left-color: #242424;
+  background-position: center left;
+  text-align: center;
+}
+label[type=range][orient="90deg"]::before {
+  top: -0.2em;
+  bottom: auto;
+  left: 0.1em;
+}
+label[type=range][orient="90deg"]::after {
+  left: 0.1em;
+  top: auto;
+  bottom: -0.2em;
+  right: 0;
+  text-align: left;
+}
+label[type=range][orient="180deg"] {
+  border-bottom-color: transparent;
+  border-top-color: #242424;
+  background-position: top center;
+  line-height: 1.4em;
+}
+label[type=range][orient="180deg"]::before {
+  bottom: 0;
+  left: auto;
+  right: -0.2em;
+  text-align: right;
+}
+label[type=range][orient="180deg"]::after {
+  bottom: 0;
+  left: -0.2em;
+  right: auto;
+  text-align: left;
+}
+label[type=range][orient="270deg"] {
+  border-bottom-color: transparent;
+  border-right-color: #242424;
+  background-position: center right;
+  text-align: center;
+}
+label[type=range][orient="270deg"]::before {
+  bottom: -0.2em;
+  top: auto;
+  right: 0.1em;
+  left: auto;
+  text-align: right;
+}
+label[type=range][orient="270deg"]::after {
+  right: 0.1em;
+  bottom: auto;
+  top: -0.2em;
+  left: auto;
+  text-align: right;
+}
